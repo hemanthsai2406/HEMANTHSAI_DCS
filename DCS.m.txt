@@ -33,21 +33,21 @@ ylabel("Precipitation(%)",'fontsize',13,'fontweight','bold')
 figure(4)
 stem(day,max_temp) %Discretizing the max_temp vs day signal
 set(gca,'fontsize',13,'fontweight','bold');
-title("Sampled Maximum Temperaure in September 2020",'fontsize',13,'fontweight','bold')
+title("Discretized Maximum Temperaure in September 2020",'fontsize',13,'fontweight','bold')
 xlabel("Day",'fontsize',13,'fontweight','bold')
 ylabel("Temperature in Celcius",'fontsize',13,'fontweight','bold')
 %minimum_temperature
 figure(5)
 stem(day,min_temp) %Discretizing the min_temp vs day signal
 set(gca,'fontsize',13,'fontweight','bold');
-title("Sampled Minimum Temperaure in September 2020",'fontsize',13,'fontweight','bold')
+title("Discretized Minimum Temperaure in September 2020",'fontsize',13,'fontweight','bold')
 xlabel("Day",'fontsize',13,'fontweight','bold')
 ylabel("Temperature in Celcius",'fontsize',13,'fontweight','bold')
 %percentage_of_precipitation
 figure(6)
 stem(day,pop) %Discretizing the precipitation vs day signal
 set(gca,'fontsize',13,'fontweight','bold');
-title("Sampled Precipitation in September 2020",'fontsize',13,'fontweight','bold')
+title("Discretized Precipitation in September 2020",'fontsize',13,'fontweight','bold')
 xlabel("Day",'fontsize',13,'fontweight','bold')
 ylabel("Precipitation(%)",'fontsize',13,'fontweight','bold')
 %Quantization of Maximum Temperature
@@ -59,23 +59,23 @@ del_maxtemp=(vmax_maxtemp-vmin_maxtemp)/L_maxtemp;
 partition_maxtemp=vmin_maxtemp:del_maxtemp:vmax_maxtemp; %Define the decision lines
 code_maxtemp=vmin_maxtemp-(del_maxtemp)/2:del_maxtemp:vmax_maxtemp+(del_maxtemp)/2; % Representation levels
 [ind_maxtemp,q_maxtemp]=quantiz(max_temp,partition_maxtemp,code_maxtemp)
-l1=length(ind_maxtemp);
-l2=length(q_maxtemp);
-for i=1:l1
-if(ind_maxtemp(i)~=0)% To make index as binary decimal so started from 0 to N
-ind_maxtemp(i)=ind_maxtemp(i)-1;
-end 
-i=i+1;
-end 
-for i=1:l2
-if(q_maxtemp(i)==vmin_maxtemp-(del_maxtemp/2)) % To make quantize value inbetween the levels
-q_maxtemp(i)=vmin_maxtemp+(del_maxtemp/2);
-end
-end 
+l1a=length(ind_maxtemp);
+l2a=length(q_maxtemp);
+for i=1:l1a
+   if(ind_maxtemp(i)~=0)% To make index as binary decimal so started from 0 to N
+       ind_maxtemp(i)=ind_maxtemp(i)-1;
+   end 
+    i=i+1;
+end   
+for i=1:l2a
+    if(q_maxtemp(i)==vmin_maxtemp-(del_maxtemp/2)) % To make quantize value inbetween the levels
+         q_maxtemp(i)=vmin_maxtemp+(del_maxtemp/2);
+    end
+end    
 figure(7);
 stem(q_maxtemp);% Display the Quantize value
 set(gca,'fontsize',13,'fontweight','bold');
-grid on; 
+grid on;                                      
 title('Quantized Signal of Maximum Temperature','fontsize',13,'fontweight','bold');
 ylabel('Temperature in Celcius','fontsize',13,'fontweight','bold');
 xlabel('Day','fontsize',13,'fontweight','bold');
@@ -83,22 +83,22 @@ xlabel('Day','fontsize',13,'fontweight','bold');
 %Quantization of Minimum Temperature
 n_bit_mintemp=3; %3-bit Quantization
 L_mintemp=2^n_bit_mintemp; %8-Level Amplitude
-vmax_mintemp=34; %Maximum Amplitude in min_temp
-vmin_mintemp=14; %Minimum Amplitude in min_temp
+vmax_mintemp=27; %Maximum Amplitude in min_temp
+vmin_mintemp=23; %Minimum Amplitude in min_temp
 del_mintemp=(vmax_mintemp-vmin_mintemp)/L_mintemp;
 partition_mintemp=vmin_mintemp:del_mintemp:vmax_mintemp;%Define the decision lines
 code_mintemp=vmin_mintemp-(del_mintemp)/2:del_mintemp:vmax_mintemp+(del_mintemp)/2;% Representation levels
 [ind_mintemp,q_mintemp]=quantiz(min_temp,partition_mintemp,code_mintemp)
-l1=length(ind_mintemp);
-l2=length(q_mintemp);
-for i=1:l1
+l1b=length(ind_mintemp);
+l2b=length(q_mintemp);
+for i=1:l1b
    if(ind_mintemp(i)~=0)% To make index as binary decimal so started from 0 to N
        ind_mintemp(i)=ind_mintemp(i)-1;
    end 
     i=i+1;
 end   
-for i=1:l2
-    if(q_mintemp(i)==vmin_mintemp-(del_mintemp/2))% To make quantize value in between the levels
+for i=1:l2b
+    if(q_mintemp(i)==vmin_mintemp-(del_mintemp/2))% To make quantize value inbetween the levels
          q_mintemp(i)=vmin_mintemp+(del_mintemp/2);
     end
 end    
@@ -119,15 +119,15 @@ del_pop=(vmax_pop-vmin_pop)/L_pop;
 partition_pop=vmin_pop:del_pop:vmax_pop;%Define the decision lines
 code_pop=vmin_pop-(del_pop)/2:del_pop:vmax_pop+(del_pop)/2;% Representation levels
 [ind_pop,q_pop]=quantiz(pop,partition_pop,code_pop)
-l1=length(ind_pop);
-l2=length(q_pop);
-for i=1:l1
+l1c=length(ind_pop);
+l2c=length(q_pop);
+for i=1:l1c
    if(ind_pop(i)~=0)% To make index as binary decimal so started from 0 to N
        ind_pop(i)=ind_pop(i)-1;
    end 
     i=i+1;
 end   
-for i=1:l2
+for i=1:l2c
     if(q_pop(i)==vmin_pop-(del_pop/2))% To make quantize value inbetween the levels
          q_pop(i)=vmin_pop+(del_pop/2);
     end
@@ -140,5 +140,85 @@ title('Quantized Signal of Precipitation','fontsize',13,'fontweight','bold');
 ylabel('Precipitation(%)','fontsize',13,'fontweight','bold');
 xlabel('Day','fontsize',13,'fontweight','bold');
 
+%Demodulation of Maximum Temperature
+code=de2bi(ind_maxtemp,'left-msb');    % Convert the decimal to binary
+k=1;
+for i=1:l1a
+    for j=1:n_bit_maxtemp
+        coded(k)=code(i,j); % convert code matrix to a coded row vector
+        j=j+1;
+        k=k+1;
+    end
+    i=i+1;
+end
+figure(10)
+subplot(2,1,1); grid on;
+stairs(coded);% Display the encoded signal
+axis([0 100 -2 3]);  
+title('Encoded Signal of Maximum Temperature');
+ylabel('Amplitude');
+xlabel('Day');
+qunt=reshape(coded,n_bit_maxtemp,length(coded)/n_bit_maxtemp);
+index=bi2de(qunt','left-msb'); % Getback the index in decimal form
+q=del_maxtemp*index+vmin_maxtemp+(del_maxtemp/2);% getback Quantized values
+subplot(2,1,2); 
+plot(q);   % Plot Demodulated signal
+title('Demodulated Signal of Maximum Temperature');
+ylabel('Temperature in degree celsius');
+xlabel('Day');
+
+%Demodulation of Minimum Temperature
+code1=de2bi(ind_mintemp,'left-msb');    % Convert the decimal to binary
+k=1;
+for i=1:l1b
+    for j=1:n_bit_mintemp
+        coded1(k)=code1(i,j); % convert code matrix to a coded row vector
+        j=j+1;
+        k=k+1;
+    end
+    i=i+1;
+end
+figure(11)
+subplot(2,1,1); grid on;
+stairs(coded1);% Display the encoded signal
+axis([0 100 -2 3]);  
+title('Encoded Signal of minimum temperature');
+ylabel('Amplitude');
+xlabel('Day');
+qunt1=reshape(coded1,n_bit_mintemp,length(coded1)/n_bit_mintemp);
+index1=bi2de(qunt1','left-msb'); % Getback the index in decimal form
+q1=del_maxtemp*index1+vmin_maxtemp+(del_maxtemp/2);% getback Quantized values
+subplot(2,1,2); 
+plot(q1);   % Plot Demodulated signal
+title('Demodulated Signal of Minimum Temperature');
+ylabel('Temperature in degree celsius');
+xlabel('Day');
+
+%Demodulation of precipitation
+code2=de2bi(ind_pop,'left-msb');    % Convert the decimal to binary
+k=1;
+for i=1:l1c
+    for j=1:n_bit_pop
+        coded2(k)=code2(i,j); % convert code matrix to a coded row vector
+        j=j+1;
+        k=k+1;
+    end
+    i=i+1;
+end
+figure(12)
+subplot(2,1,1); 
+stairs(coded2);% Display the encoded signal
+axis([0 100 -2 3]);  
+title('Encoded Signal of Precipitation');
+ylabel('Amplitude');
+xlabel('Day');
+qunt2=reshape(coded2,n_bit_pop,length(coded2)/n_bit_pop);
+index2=bi2de(qunt2','left-msb'); % Getback the index in decimal form
+q2=del_pop*index2+vmin_pop+(del_pop/2);% getback Quantized values
+subplot(2,1,2); 
+plot(q2);   % Plot Demodulated signal
+title('Demodulated Signal of precipitation');
+ylabel('Precipitation(%)');
+xlabel('Day');
 
 
