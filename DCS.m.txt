@@ -1,0 +1,144 @@
+clc
+clear all
+close all
+%Data_Set
+day=[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30] %X-axis represents the Day in September'20
+max_temp=[33.5 33 35.2 32.8 33.9 34 35 34.3 34 32.5 33 33 28 31.8 32 32.3 33.3 33 31 29.5 32 35 34.9 36 34 33 32.8 35 35 32] % maximum temperature recorded in Chennai
+min_temp=[25 26 25.8 25 26.3 26.5 26.4 25 24.8 26 27 26 25 23 24.9 26 25 27 23 25 24.7 25 24.3 26 26 25 27 25 24 23]% Minimum temperature recorded in chennai
+pop=[71 73 74 72 68 74 70 68 72 81 69 62 61 57 59 64 65 66 72 74 77 79 77 78 81 77 78 71 68 73]% Percentage of precipitation
+%Plotting the Data
+%maximum_temperature
+figure(1)
+plot(day,max_temp); %plot a continuous signal between day and maximum temperature
+set(gca,'fontsize',13,'fontweight','bold');
+title("Maximum Temperaure in September 2020",'fontsize',13,'fontweight','bold')
+xlabel("Day",'fontsize',13,'fontweight','bold')
+ylabel("Temperature in Celcius",'fontsize',13,'fontweight','bold')
+%minimum_temperature
+figure(2)
+plot(day,min_temp); %plot a continuous signal between day and manimum temperature
+set(gca,'fontsize',13,'fontweight','bold');
+title("Minimum Temperaure in September 2020",'fontsize',13,'fontweight','bold')
+xlabel("Day",'fontsize',13,'fontweight','bold')
+ylabel("Temperature in Celcius",'fontsize',13,'fontweight','bold')
+%percentage_of_precipitation
+figure(3)
+plot(day,pop); %plot a continuous signal between day and precipitation
+set(gca,'fontsize',13,'fontweight','bold');
+title("Percentage of Precipitation in September 2020",'fontsize',13,'fontweight','bold')
+xlabel("Day",'fontsize',13,'fontweight','bold')
+ylabel("Precipitation(%)",'fontsize',13,'fontweight','bold')
+%Sampling the Data
+%maximum_temperature
+figure(4)
+stem(day,max_temp) %Discretizing the max_temp vs day signal
+set(gca,'fontsize',13,'fontweight','bold');
+title("Sampled Maximum Temperaure in September 2020",'fontsize',13,'fontweight','bold')
+xlabel("Day",'fontsize',13,'fontweight','bold')
+ylabel("Temperature in Celcius",'fontsize',13,'fontweight','bold')
+%minimum_temperature
+figure(5)
+stem(day,min_temp) %Discretizing the min_temp vs day signal
+set(gca,'fontsize',13,'fontweight','bold');
+title("Sampled Minimum Temperaure in September 2020",'fontsize',13,'fontweight','bold')
+xlabel("Day",'fontsize',13,'fontweight','bold')
+ylabel("Temperature in Celcius",'fontsize',13,'fontweight','bold')
+%percentage_of_precipitation
+figure(6)
+stem(day,pop) %Discretizing the precipitation vs day signal
+set(gca,'fontsize',13,'fontweight','bold');
+title("Sampled Precipitation in September 2020",'fontsize',13,'fontweight','bold')
+xlabel("Day",'fontsize',13,'fontweight','bold')
+ylabel("Precipitation(%)",'fontsize',13,'fontweight','bold')
+%Quantization of Maximum Temperature
+n_bit_maxtemp=3; %3-bit Quantization
+L_maxtemp=2^n_bit_maxtemp; %8-Level Amplitude
+vmax_maxtemp=35; %Maximum Amplitude in max_temp
+vmin_maxtemp=28; %Minimum Amplitude in max_temp
+del_maxtemp=(vmax_maxtemp-vmin_maxtemp)/L_maxtemp;
+partition_maxtemp=vmin_maxtemp:del_maxtemp:vmax_maxtemp; %Define the decision lines
+code_maxtemp=vmin_maxtemp-(del_maxtemp)/2:del_maxtemp:vmax_maxtemp+(del_maxtemp)/2; % Representation levels
+[ind_maxtemp,q_maxtemp]=quantiz(max_temp,partition_maxtemp,code_maxtemp)
+l1=length(ind_maxtemp);
+l2=length(q_maxtemp);
+for i=1:l1
+if(ind_maxtemp(i)~=0)% To make index as binary decimal so started from 0 to N
+ind_maxtemp(i)=ind_maxtemp(i)-1;
+end 
+i=i+1;
+end 
+for i=1:l2
+if(q_maxtemp(i)==vmin_maxtemp-(del_maxtemp/2)) % To make quantize value inbetween the levels
+q_maxtemp(i)=vmin_maxtemp+(del_maxtemp/2);
+end
+end 
+figure(7);
+stem(q_maxtemp);% Display the Quantize value
+set(gca,'fontsize',13,'fontweight','bold');
+grid on; 
+title('Quantized Signal of Maximum Temperature','fontsize',13,'fontweight','bold');
+ylabel('Temperature in Celcius','fontsize',13,'fontweight','bold');
+xlabel('Day','fontsize',13,'fontweight','bold');
+
+%Quantization of Minimum Temperature
+n_bit_mintemp=3; %3-bit Quantization
+L_mintemp=2^n_bit_mintemp; %8-Level Amplitude
+vmax_mintemp=34; %Maximum Amplitude in min_temp
+vmin_mintemp=14; %Minimum Amplitude in min_temp
+del_mintemp=(vmax_mintemp-vmin_mintemp)/L_mintemp;
+partition_mintemp=vmin_mintemp:del_mintemp:vmax_mintemp;%Define the decision lines
+code_mintemp=vmin_mintemp-(del_mintemp)/2:del_mintemp:vmax_mintemp+(del_mintemp)/2;% Representation levels
+[ind_mintemp,q_mintemp]=quantiz(min_temp,partition_mintemp,code_mintemp)
+l1=length(ind_mintemp);
+l2=length(q_mintemp);
+for i=1:l1
+   if(ind_mintemp(i)~=0)% To make index as binary decimal so started from 0 to N
+       ind_mintemp(i)=ind_mintemp(i)-1;
+   end 
+    i=i+1;
+end   
+for i=1:l2
+    if(q_mintemp(i)==vmin_mintemp-(del_mintemp/2))% To make quantize value in between the levels
+         q_mintemp(i)=vmin_mintemp+(del_mintemp/2);
+    end
+end    
+figure(8);
+stem(q_mintemp); % Display the Quantize value
+set(gca,'fontsize',13,'fontweight','bold');
+grid on;                                      
+title('Quantized Signal of Minimum Temperature','fontsize',13,'fontweight','bold');
+ylabel('Temperature in celcius','fontsize',13,'fontweight','bold');
+xlabel('Day','fontsize',13,'fontweight','bold');
+
+%%Quantization of Precipitation
+n_bit_pop=3; %3-bit Quantization
+L_pop=2^n_bit_pop; %8-Level Amplitude
+vmax_pop=81; %Maximum Amplitude in precipitation
+vmin_pop=57; %Minimum Amplitude in precipitation
+del_pop=(vmax_pop-vmin_pop)/L_pop;
+partition_pop=vmin_pop:del_pop:vmax_pop;%Define the decision lines
+code_pop=vmin_pop-(del_pop)/2:del_pop:vmax_pop+(del_pop)/2;% Representation levels
+[ind_pop,q_pop]=quantiz(pop,partition_pop,code_pop)
+l1=length(ind_pop);
+l2=length(q_pop);
+for i=1:l1
+   if(ind_pop(i)~=0)% To make index as binary decimal so started from 0 to N
+       ind_pop(i)=ind_pop(i)-1;
+   end 
+    i=i+1;
+end   
+for i=1:l2
+    if(q_pop(i)==vmin_pop-(del_pop/2))% To make quantize value inbetween the levels
+         q_pop(i)=vmin_pop+(del_pop/2);
+    end
+end    
+figure(9);
+stem(q_pop); % Display the Quantize value
+set(gca,'fontsize',13,'fontweight','bold');
+grid on;                                      
+title('Quantized Signal of Precipitation','fontsize',13,'fontweight','bold');
+ylabel('Precipitation(%)','fontsize',13,'fontweight','bold');
+xlabel('Day','fontsize',13,'fontweight','bold');
+
+
+
